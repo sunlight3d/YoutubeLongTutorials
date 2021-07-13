@@ -1,6 +1,6 @@
 using System;
 
-namespace apiDotNet5.models {
+namespace apiDotNet5.Models {
     public record Location {
         public string State { get; set; }
         public string City { get; set; }
