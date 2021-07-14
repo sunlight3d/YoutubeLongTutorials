@@ -9,6 +9,6 @@ namespace MovieApp.Repositories
         IEnumerable<Movie> GetMovies();
         Movie GetMovie(Guid id);
         void InsertMovie(Movie movie);
-
+        void UpdateMovie(Movie movie);
     }
 }

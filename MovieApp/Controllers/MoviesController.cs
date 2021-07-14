@@ -33,8 +33,15 @@ namespace MovieApp.Controllers
             }
             return Ok(movie);
         }
+        [HttpPost]
         public ActionResult<MovieDto> InsertMovie(InsertMovieDto insertMovieDto) {
-            
+            Movie movie = new() {
+                Id = Guid.NewGuid(),
+                Name = insertMovieDto.Name,
+                ReleaseYear = insertMovieDto.ReleaseYear
+            };
+            repository.InsertMovie(movie);
+            return CreatedAtAction(nameof(GetMovie), new { id = movie.Id}, movie.ToDto());
         }
     }
 

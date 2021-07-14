@@ -30,9 +30,12 @@ namespace MovieApp.Repositories
         public Movie GetMovie(Guid id) {
             return this.movies.Where(movie => movie.Id == id).SingleOrDefault();
         }
-
         public void InsertMovie(Movie movie) {
             movies.Add(movie);
+        }
+        public void UpdateMovie(Movie movie) {
+             int index = movies.FindIndex(eachMovie => eachMovie.Id == movie.Id);
+             movies[index] = movie;
         }
     }
 
