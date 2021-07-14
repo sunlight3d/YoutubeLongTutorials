@@ -11,8 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MovieApp.Repositories;
 
-namespace FlightApp
+namespace MovieApp
 {
     public class Startup
     {
@@ -26,11 +27,11 @@ namespace FlightApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FlightApp", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieApp", Version = "v1" });
             });
         }
 
@@ -41,7 +42,7 @@ namespace FlightApp
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FlightApp v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieApp v1"));
             }
 
             app.UseHttpsRedirection();
