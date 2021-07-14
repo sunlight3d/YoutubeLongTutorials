@@ -1,6 +1,6 @@
 dotnet --version
 dotnet --info
-dotnet new webapi -n Flight
+dotnet new webapi -n MovieApp
 
 dotnet dev-certs https --trust
 https://localhost:5001/swagger

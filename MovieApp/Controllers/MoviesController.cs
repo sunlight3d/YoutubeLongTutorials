@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using MovieApp.Models;
 using MovieApp.Repositories;
 using System;
+using System.Linq;
+using MovieApp.Dto;
 
 namespace MovieApp.Controllers
 {
@@ -19,17 +21,20 @@ namespace MovieApp.Controllers
             this.repository = repository;
         }
         [HttpGet]
-        public IEnumerable<Movie> getMovies(){
-            return repository.GetMovies();
+        public IEnumerable<MovieDto> getMovies(){
+            return repository.GetMovies().Select(movie => movie.ToDto());
         }
         //GET movies/id
         [HttpGet("{id}")]
-        public ActionResult<Movie> GetMovie(Guid id) {
-            var movie = repository.GetMovie(id);
+        public ActionResult<MovieDto> GetMovie(Guid id) {
+            var movie = repository.GetMovie(id).ToDto();
             if(movie == null) {
                 return NotFound();
             }
             return Ok(movie);
+        }
+        public ActionResult<MovieDto> InsertMovie(InsertMovieDto insertMovieDto) {
+            
         }
     }
 

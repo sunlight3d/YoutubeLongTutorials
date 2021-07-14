@@ -6,7 +6,9 @@ using System.Linq;
 namespace MovieApp.Repositories
 {
     public interface IMovieRepository {
-        public IEnumerable<Movie> GetMovies();
-        public Movie GetMovie(Guid id);
+        IEnumerable<Movie> GetMovies();
+        Movie GetMovie(Guid id);
+        void InsertMovie(Movie movie);
+
     }
 }

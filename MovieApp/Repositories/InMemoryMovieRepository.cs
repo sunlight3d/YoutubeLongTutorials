@@ -31,6 +31,9 @@ namespace MovieApp.Repositories
             return this.movies.Where(movie => movie.Id == id).SingleOrDefault();
         }
 
+        public void InsertMovie(Movie movie) {
+            movies.Add(movie);
+        }
     }
 
 }
