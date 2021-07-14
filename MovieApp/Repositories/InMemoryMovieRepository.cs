@@ -37,6 +37,10 @@ namespace MovieApp.Repositories
              int index = movies.FindIndex(eachMovie => eachMovie.Id == movie.Id);
              movies[index] = movie;
         }
+        public void DeleteMovie(Guid id) {
+            int index = movies.FindIndex(eachMovie => eachMovie.Id == id);
+            movies.RemoveAt(index);
+        }
     }
 
 }

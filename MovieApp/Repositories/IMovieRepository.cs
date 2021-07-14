@@ -10,5 +10,6 @@ namespace MovieApp.Repositories
         Movie GetMovie(Guid id);
         void InsertMovie(Movie movie);
         void UpdateMovie(Movie movie);
+        void DeleteMovie(Guid id);
     }
 }

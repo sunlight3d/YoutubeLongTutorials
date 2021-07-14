@@ -43,6 +43,25 @@ namespace MovieApp.Controllers
             repository.InsertMovie(movie);
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id}, movie.ToDto());
         }
+        //PUT /movies/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateMovie(Guid id, UpdateMovieDto updateMovieDto) {
+            Movie existingMovie = repository.GetMovie(id);
+            if(existingMovie is null) {
+                return NotFound();
+            }
+            Movie updatedMovie = existingMovie with {
+                Name = updateMovieDto.Name,
+                ReleaseYear = updateMovieDto.ReleaseYear
+            };
+            repository.UpdateMovie(updatedMovie);
+            return NoContent();//204
+        }
+        [HttpDelete("{id}")]
+        public ActionResult DeleteMovie(Guid id) {
+            repository.DeleteMovie(id);
+            return NoContent();
+        }
     }
 
 }
