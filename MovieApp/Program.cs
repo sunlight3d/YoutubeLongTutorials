@@ -6,7 +6,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+/*
+dotnet user-secrets init
+key saved to MovieApp.csproj
+dotnet user-secrets set MongoDBSettings:Password 123456
 
+*/
 namespace MovieApp
 {
     public class Program

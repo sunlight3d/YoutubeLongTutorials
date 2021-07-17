@@ -2,6 +2,7 @@ using System;
 using MovieApp.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MovieApp.Repositories
 {
@@ -24,22 +25,25 @@ namespace MovieApp.Repositories
             },
         };
         
-        public IEnumerable<Movie> GetMovies() {
-            return movies;
+        public async Task<IEnumerable<Movie>> GetMoviesAsync() {
+            return await Task.FromResult(movies);
         }
-        public Movie GetMovie(Guid id) {
-            return this.movies.Where(movie => movie.Id == id).SingleOrDefault();
+        public async Task<Movie> GetMovieAsync(Guid id) {
+            return await Task.FromResult(this.movies.Where(movie => movie.Id == id).SingleOrDefault());
         }
-        public void InsertMovie(Movie movie) {
+        public async Task InsertMovieAsync(Movie movie) {
             movies.Add(movie);
+            await Task.CompletedTask;
         }
-        public void UpdateMovie(Movie movie) {
+        public async Task UpdateMovieAsync(Movie movie) {
              int index = movies.FindIndex(eachMovie => eachMovie.Id == movie.Id);
              movies[index] = movie;
+             await Task.CompletedTask;
         }
-        public void DeleteMovie(Guid id) {
+        public async Task DeleteMovieAsync(Guid id) {
             int index = movies.FindIndex(eachMovie => eachMovie.Id == id);
             movies.RemoveAt(index);
+            await Task.CompletedTask;
         }
     }
 

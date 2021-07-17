@@ -5,6 +5,7 @@ using MovieApp.Repositories;
 using System;
 using System.Linq;
 using MovieApp.Dto;
+using System.Threading.Tasks;
 
 namespace MovieApp.Controllers
 {
@@ -21,32 +22,34 @@ namespace MovieApp.Controllers
             this.repository = repository;
         }
         [HttpGet]
-        public IEnumerable<MovieDto> getMovies(){
-            return repository.GetMovies().Select(movie => movie.ToDto());
+        public async Task<IEnumerable<MovieDto>>  getMoviesAsync(){
+            IEnumerable<MovieDto> movieDtos = (await repository.GetMoviesAsync())
+                                        .Select(movie => movie.ToDto());
+            return movieDtos;
         }
         //GET movies/id
         [HttpGet("{id}")]
-        public ActionResult<MovieDto> GetMovie(Guid id) {
-            var movie = repository.GetMovie(id).ToDto();
+        public async Task<ActionResult<MovieDto>> GetMovie(Guid id) {
+            var movie = (await repository.GetMovieAsync(id))?.ToDto();
             if(movie == null) {
                 return NotFound();
             }
             return Ok(movie);
         }
         [HttpPost]
-        public ActionResult<MovieDto> InsertMovie(InsertMovieDto insertMovieDto) {
+        public async Task<ActionResult<MovieDto>> InsertMovieAsync(InsertMovieDto insertMovieDto) {
             Movie movie = new() {
                 Id = Guid.NewGuid(),
                 Name = insertMovieDto.Name,
                 ReleaseYear = insertMovieDto.ReleaseYear
             };
-            repository.InsertMovie(movie);
+            await repository.InsertMovieAsync(movie);
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id}, movie.ToDto());
         }
         //PUT /movies/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateMovie(Guid id, UpdateMovieDto updateMovieDto) {
-            Movie existingMovie = repository.GetMovie(id);
+        public async Task<ActionResult> UpdateMovieAsync(Guid id, UpdateMovieDto updateMovieDto) {
+            Movie existingMovie = await repository.GetMovieAsync(id);
             if(existingMovie is null) {
                 return NotFound();
             }
@@ -54,12 +57,12 @@ namespace MovieApp.Controllers
                 Name = updateMovieDto.Name,
                 ReleaseYear = updateMovieDto.ReleaseYear
             };
-            repository.UpdateMovie(updatedMovie);
+            await repository.UpdateMovieAsync(updatedMovie);
             return NoContent();//204
         }
         [HttpDelete("{id}")]
-        public ActionResult DeleteMovie(Guid id) {
-            repository.DeleteMovie(id);
+        public async Task<ActionResult> DeleteMovieAsync(Guid id) {
+            await repository.DeleteMovieAsync(id);
             return NoContent();
         }
     }

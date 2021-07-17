@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using System.Threading.Tasks;
 /*
 docker login
 docker run -d --rm --name mongoMovieApp -p 27018:27017 -v mongoDBDatabase:/data/db mongo
+docker volume ls
+docker volume rm mongoDBDatabase
+docker run -d --rm --name mongoMovieApp -p 27018:27017 -v mongoDBDatabase:/data/db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=123456 mongo
 */
 namespace MovieApp.Repositories
 {
@@ -15,36 +19,38 @@ namespace MovieApp.Repositories
         private const string databaseName = "movieDB";
         private const string collectionName = "movies";
         private readonly IMongoCollection<Movie> moviesCollection;
-        private readonly FilterDefinitionBuilder<Movie> filterBuilder 
+        private readonly FilterDefinitionBuilder<Movie> filterBuilder = Builders<Movie>.Filter;
         public MongoDbMovieRepository(IMongoClient mongoClient)
         {
             IMongoDatabase mongoDatabase = mongoClient.GetDatabase(databaseName);
             moviesCollection = mongoDatabase.GetCollection<Movie>(collectionName);
         }
-        public void InsertMovie(Movie movie)
+        public async Task InsertMovieAsync(Movie movie)
         {
-            moviesCollection.InsertOne(movie);
+            await moviesCollection.InsertOneAsync(movie);
         }
-        public Movie GetMovie(Guid id)
+        public async Task<Movie> GetMovieAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(eachMovie => eachMovie.Id, id);
+            return await moviesCollection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public IEnumerable<Movie> GetMovies()
+        public async Task<IEnumerable<Movie>> GetMoviesAsync()
         {
-            return moviesCollection.Find(new BsonDocument()).ToList();
+            return await moviesCollection.Find(new BsonDocument()).ToListAsync();
         }
-        public void DeleteMovie(Guid id)
+        public async Task DeleteMovieAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(existingItem => existingItem.Id, id);            
+            await moviesCollection.DeleteOneAsync(filter);
         }
         
-        
+        public async Task UpdateMovieAsync(Movie movie)
+        {
+            var filter = filterBuilder.Eq(existingItem => existingItem.Id, movie.Id);            
+            await moviesCollection.ReplaceOneAsync(filter, movie);
+        }
 
-        public void UpdateMovie(Movie movie)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }
