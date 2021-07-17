@@ -11,8 +11,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using MovieApp.Models;
 using MovieApp.Repositories;
+using MovieApp.Settings;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+
 namespace MovieApp
 {
     public class Startup
@@ -26,8 +32,15 @@ namespace MovieApp
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
+        {                        
+            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+            BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+            services.AddSingleton<IMongoClient>(ServiceProvider => {
+                MongoDBSettings mongoDBSettings = Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
+                return new MongoClient(mongoDBSettings.ConnectionString);                
+            });
+            //services.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
+            services.AddSingleton<IMovieRepository, MongoDbMovieRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
