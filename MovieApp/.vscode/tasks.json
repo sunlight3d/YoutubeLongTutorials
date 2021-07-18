@@ -77,7 +77,9 @@
             "dependsOn": [
                 "docker-build: debug"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "os": "Windows"
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/MovieApp.csproj",
                 "enableDebugging": true
@@ -89,7 +91,9 @@
             "dependsOn": [
                 "docker-build: release"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "os": "Windows"
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/MovieApp.csproj"
             }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 /*
+dotnet dev-certs https --trust
 dotnet user-secrets init
 key saved to MovieApp.csproj
 dotnet user-secrets set MongoDBSettings:Password 123456
