@@ -5,13 +5,7 @@ using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Threading.Tasks;
-/*
-docker login
-docker run -d --rm --name mongoMovieApp -p 27018:27017 -v mongoDBDatabase:/data/db mongo
-docker volume ls
-docker volume rm mongoDBDatabase
-docker run -d --rm --name mongoMovieApp -p 27018:27017 -v mongoDBDatabase:/data/db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=123456 mongo
-*/
+
 namespace MovieApp.Repositories
 {
     public class MongoDbMovieRepository : IMovieRepository

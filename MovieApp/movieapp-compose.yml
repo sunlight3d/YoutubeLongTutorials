@@ -1,0 +1,36 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+version: '3.9'
+services:
+  movie-app:
+    image: movieapp:1.0    
+    container_name: movie-app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:80
+    environment:
+      - MongoDBSettings:Host=mongo-movie-app
+      - MongoDBSettings:Password=123456
+    depends_on:
+      - mongo-movie-app
+    networks:
+      - movieapp-network
+  mongo-movie-app:
+    image: mongo     
+    container_name: mongo-movie-app
+    ports:
+      - 27018:27017
+    volumes:
+      - mongoDBDatabase:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    networks:
+      - movieapp-network
+volumes:
+  mongoDBDatabase: {}
+networks:
+  movieapp-network:
+    name: movieapp-network
+    
